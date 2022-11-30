@@ -13,26 +13,32 @@ class Ingredient(models.Model):
         ('Kg', _("kilogram(s)")),
         ('ml', _("mililiter(s)")),
         ('L', _("liter(s)")),
-        (_('Cup'), _("cup(s)")),
-        (_('Tspn'), _("tea spoon(s)")),
-        (_('Tblspn'), _("table spoon(s)")),
-
+        ('Cup', _("cup(s)")),
+        ('Tspn', _("tea spoon(s)")),
+        ('Tblspn', _("table spoon(s)")),
+        ('Oz', _("Oz")),
+        ('whole', _("Whole"))
     )
     
     metrics = models.CharField(_('metrics'), max_length=6, choices=METRICS, default='g')
 
     def __str__(self) -> str:
-        return f'{self.amount}{self.metrics} {self.ingredient}'
+        return f'{self.amount} {self.metrics} {self.ingredient}'
 
 
 class Recipe(models.Model):
     name = models.CharField(_('name'), max_length=100)
+    author = models.ForeignKey(get_user_model(),
+        verbose_name=_("author"), 
+        on_delete=models.CASCADE, 
+        related_name='recipe_author')
     ingredients = models.ManyToManyField(Ingredient, verbose_name=_("Ingredients"))
     steps = models.TextField(_('steps'), max_length=10000)
     duration = models.DecimalField(_('duration(min)'), decimal_places=0, max_digits=4)
-    calories = models.DecimalField(_('calories'), decimal_places=1, max_digits=4)
-    servings = models.DecimalField(_('servings'), decimal_places=1, max_digits=4)
-
+    calories = models.DecimalField(_('calories'), decimal_places=0, max_digits=4)
+    servings = models.DecimalField(_('servings'), decimal_places=0, max_digits=4)
+    picture = models.ImageField(_('picture'), upload_to='pictures', blank=True, null=True)
+    created_on = models.DateTimeField('created_on', auto_now_add=True)
 
     def __str__(self) -> str:
         return f'"{self.name}" that requires {self.duration} min to make, has {self.servings} servings and about {self.calories} calories' 
@@ -53,21 +59,33 @@ class RecipeComment(models.Model):
     comment = models.TextField(_('comment'), max_length=1000)
 
     def __str__(self):
-        return f"{self.writer} on {self.recipe}, date: {self.created_on}"
+        return f"User: {self.writer} on '{self.recipe.name}', date: {self.created_on}"
     
     class Meta:
         ordering = ('-created_on',)
 
 class Rating(models.Model):
     STARS = (
-        ('1', _("Awful")),
-        ('2', _("Bad")),
-        ('3', _("Normal")),
-        ('4', _("Deliciuos")),
-        ('5', _("Amazing!")),
+        ('1', _("(1) Awful")),
+        ('2', _("(2) Bad")),
+        ('3', _("(3) Normal")),
+        ('4', _("(4) Deliciuos")),
+        ('5', _("(5) Amazing!")),
     )
+    recipe = models.ForeignKey(
+        Recipe, 
+        verbose_name=_("recipe"), 
+        on_delete=models.CASCADE, 
+        related_name="star")
+    rater = models.ForeignKey(
+        get_user_model(), 
+        verbose_name=_("rater"), 
+        on_delete=models.CASCADE, 
+        related_name='recipe_ratings')
+    stars = models.CharField(_('stars'), max_length=10, choices=STARS)
 
-    stars = models.CharField(_('stars'), max_length=1, choices=STARS)
+    def __str__(self) -> str:
+        return f'{self.rater} gave {self.stars} star on "{self.recipe.name}" '
 
 
 
