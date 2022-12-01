@@ -23,16 +23,19 @@ class Ingredient(models.Model):
     metrics = models.CharField(_('metrics'), max_length=6, choices=METRICS, default='g')
 
     def __str__(self) -> str:
-        return f'{self.amount} {self.metrics} {self.ingredient}'
+        if self.metrics == 'whole':
+            return f'{int(self.amount)} {self.metrics} {self.ingredient}'
+        else:
+            return f'{self.amount} {self.metrics} {self.ingredient}'
 
 
 class Recipe(models.Model):
     name = models.CharField(_('name'), max_length=100)
-    author = models.ForeignKey(get_user_model(),
+    author = models.ForeignKey(User,
         verbose_name=_("author"), 
         on_delete=models.CASCADE, 
         related_name='recipe_author')
-    ingredients = models.ManyToManyField(Ingredient, verbose_name=_("Ingredients"))
+    ingredients = models.ManyToManyField(Ingredient, verbose_name=_("ingredients"))
     steps = models.TextField(_('steps'), max_length=10000)
     duration = models.DecimalField(_('duration(min)'), decimal_places=0, max_digits=4)
     calories = models.DecimalField(_('calories'), decimal_places=0, max_digits=4)
@@ -43,6 +46,9 @@ class Recipe(models.Model):
     def __str__(self) -> str:
         return f'"{self.name}" that requires {self.duration} min to make, has {self.servings} servings and about {self.calories} calories' 
 
+    def show_ingredients(self) -> str:
+        return ', '.join(ingredients.ingredient for ingredients in self.ingredients.all()[:3])
+    show_ingredients.short_description = 'ingredient(s)'
 
 class RecipeComment(models.Model):
     recipe = models.ForeignKey(
@@ -87,6 +93,8 @@ class Rating(models.Model):
     def __str__(self) -> str:
         return f'{self.rater} gave {self.stars} star on "{self.recipe.name}" '
 
+    def get_rcp_name(self):
+        return self.recipe.name
 
 
    
