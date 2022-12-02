@@ -24,7 +24,7 @@ class Profile(models.Model):
     related_name="profile"
     )
     photo = models.ImageField("photo", upload_to='user_profile/photos', null=True, blank=True)
-    profile_type = models.CharField(_('types'), max_length=10, choices=TYPES)
+    profile_type = models.CharField(_('Choose your type'), max_length=10, choices=TYPES)
 
     def __str__(self) -> str:
         return f"{self.user} profile"

@@ -1,0 +1,7 @@
+{% extends 'recipes/base.html' %}
+{% block title %}Logged out {{ block.super }} {% endblock title %}
+{% block content %}
+<h1>Successfully logged out</h1>
+<p>Your session is closed. You can <a href="{% url 'login' %}">Log in </a>again.</p>
+
+{% endblock content %}

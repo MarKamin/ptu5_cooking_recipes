@@ -1,0 +1,13 @@
+{% extends 'recipes/base.html' %}
+{% block title %}Recipes Section{% endblock title %}
+{% block content %}
+    <h1>Welcome to Recipes Section</h1>
+    <p>We hope you will find some thing that satisfes you, 
+        we curently  have {{ recipes_count }} recipes in total.. Bon Apetite!</p>
+    <ul>
+        {% for recipe in recipe_list %}
+            <li>"{{ recipe.name}}"" by {{ recipe.author }}, created at {{ recipe.created_on }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock content %}

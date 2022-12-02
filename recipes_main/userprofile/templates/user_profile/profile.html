@@ -1,0 +1,25 @@
+{% extends 'recipes/base.html' %}
+{% block title %}{{ block.super }} {{ user }} profile {% endblock title %}
+{% block content %}
+<h1>{{ user }} profile<a href="{% url 'update_profile' %}">(Update)</a></h1>
+<p>{{ user.profile.profile_type }}</p>
+<div class='flex-profile'>
+    {% if user.profile and user.profile.photo %}
+    <div>
+        <img src="{{ user.profile.photo.url }}" class="user-profile-photo">
+    </div>
+    {% endif %}
+    <div class="name-last-name">
+        <form method = "POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+        <input type = "submit" value = "Submit">
+        </form>
+        <p>Name: {% if user.first_name %}{{ user.first_name }}{% else %} Mr/Mrs. ? <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
+        <p>Last Name: {% if user.last_name %}{{ user.last_name }}{% else %} Mr/Mrs. ? <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
+        <p>Email: {% if user.email %}{{ user.email }}{% else %} None <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
+    </div>
+
+</div>
+
+{% endblock content %}

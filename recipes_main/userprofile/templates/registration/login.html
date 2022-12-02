@@ -1,0 +1,15 @@
+{% extends 'recipes/base.html' %}
+{% block title %}Login{% endblock title %}
+{% block content %}
+<h1>Login to your Account</h1>
+
+<div>
+    <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Log In</button>
+    </form>
+<div>
+<p><a href="{% url 'password_reset' %}">Forgot password?</a></p>
+
+{% endblock content %}
