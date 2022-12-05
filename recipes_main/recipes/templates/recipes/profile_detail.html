@@ -1,0 +1,6 @@
+{% extends 'recipes/base.html' %}
+{% block title %}{{ object }}{% endblock title %}
+{% block content %}
+    <h1>{{ object.user }} {{ object.profile_type }}</h1>
+    <h3><a href="{% url 'user_recipes_list' %}">User recipes</a></h3>
+{% endblock content %}

@@ -2,10 +2,11 @@ from django.shortcuts import render
 from .models import Recipe
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.shortcuts import render, get_object_or_404  
 from django.contrib.auth import get_user_model
 from django.db.models import Count
+from userprofile.models import Profile
 
 
 
@@ -23,7 +24,7 @@ def home(request):
 
 class RecipeListView(ListView):
     model = Recipe
-    paginate_by = 1
+    paginate_by = 5
     template_name = 'recipes/recipes_list.html'
 
     def get_context_data(self, **kwargs):
@@ -41,3 +42,31 @@ class RecipeListView(ListView):
         if query:
             queryset = queryset.filter(Q(name__icontains=query) | Q(author__icontains=query))
         return queryset
+
+class RecipeDetailView(DetailView):
+    model = Recipe
+    template_name = 'recipes/recipe_detail.html'   
+
+class UserListView(ListView):
+    model = User
+    paginate_by = 5
+    template_name = 'recipes/user_list.html'
+
+class UserDetailView(DetailView):
+    model = Profile
+    template_name = 'recipes/profile_detail.html' 
+
+class UserRecipesListView(ListView):
+    model = Recipe
+    paginate_by = 5
+    template_name = 'recipes/user_recipes_list.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(author=self.request.user).order_by('name')
+        return queryset 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rcp_count'] = self.get_queryset().count()
+        return context

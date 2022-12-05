@@ -6,7 +6,7 @@
         we curently  have {{ recipes_count }} recipes in total.. Bon Apetite!</p>
     <ul>
         {% for recipe in recipe_list %}
-            <li>"{{ recipe.name}}"" by {{ recipe.author }}, created at {{ recipe.created_on }}</li>
+            <li><a href="{% url 'recipe' recipe.pk %}">"{{ recipe.name}}"</a> by {{ recipe.author }}, created at {{ recipe.created_on }}</li>
         {% endfor %}
     </ul>
 

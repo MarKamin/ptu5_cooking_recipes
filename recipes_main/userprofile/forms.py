@@ -1,9 +1,20 @@
 from .models import Profile
 from django import forms
+from django.contrib.auth import get_user_model
 
 
-class ProfileTypeForm(forms.ModelForm):
-    # choose_your_type = forms.ChoiceField(choices = Profile.TYPES)
+User = get_user_model()
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+class ProfileUpdateForm(forms.ModelForm):
+
     class Meta:
         model = Profile
-        fields = ('profile_type',)
+        fields = ("photo",'profile_type', 'about' )
+

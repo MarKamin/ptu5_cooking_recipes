@@ -1,0 +1,15 @@
+{% extends 'recipes/base.html' %}
+{% block title %}{{ object }}{% endblock title %}
+{% block content %}
+    <h1>"{{ object.name }}" recipe</h1>
+    <h3>By {{ object.author }} ({{ object.author.profile.profile_type }})</h3>
+    {% if object.picture %}
+        <img src="{{ object.picture.url }}" class="recipe-photo"></img>
+    {% endif %}
+    <p>Ingredients: {{ object.show_ingredients }}</p>
+    <p>Instructions: {{ object.steps }}</p>
+    <p>Duration: {{ object.duration }} min.</p>
+    <p>Calories: {{ object.calories }} cal</p>
+    <p>Servings: {{ object.servings }}</p>
+    <p>Created on: {{ object.created_on }}</p>
+{% endblock content %}

@@ -1,0 +1,8 @@
+{% extends 'recipes/base.html' %}
+{% block title %}{{ object }}{% endblock title %}
+{% block content %}
+<h3>{{  user }} has {{ rcp_count }} recipes</h3>
+{% for recipe in recipe_list %}
+    <p> {{ recipe.name }}</p>
+{% endfor %}
+{% endblock content %}

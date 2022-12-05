@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
+from django.utils.html import format_html
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -47,8 +49,9 @@ class Recipe(models.Model):
         return f'"{self.name}" that requires {self.duration} min to make, has {self.servings} servings and about {self.calories} calories' 
 
     def show_ingredients(self) -> str:
-        return ', '.join(ingredients.ingredient for ingredients in self.ingredients.all()[:3])
+        return ', '.join(ingredients.ingredient + ' ' +str(ingredients.amount)+' '+str( ingredients.metrics) for ingredients in self.ingredients.all()[:3])
     show_ingredients.short_description = 'ingredient(s)'
+
 
 class RecipeComment(models.Model):
     recipe = models.ForeignKey(
