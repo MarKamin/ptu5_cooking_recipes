@@ -3,13 +3,7 @@
 {% block content %}
     <h1>"{{ object.name }}" recipe</h1>
     <h3>By {{ object.author }} ({{ object.author.profile.profile_type }})</h3>
-    {% if object.picture %}
-        <img src="{{ object.picture.url }}" class="recipe-photo"></img>
-    {% endif %}
-    <p>Ingredients:
-        {% for i in object.ingredients.all %}
-            {{ i }}.
-        {% endfor %}
+ 
     </p>
     <p>Instructions: {{ object.steps }}</p>
     <p>Duration: {{ object.duration }} min.</p>
