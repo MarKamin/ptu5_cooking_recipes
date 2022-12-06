@@ -1,4 +1,5 @@
 {% extends 'recipes/base.html' %}
+{% load static %}
 {% block title %}Recipes Section{% endblock title %}
 {% block content %}
     <h1>Welcome to Recipes Section</h1>
@@ -7,11 +8,33 @@
     <div>
         <a class="button" href="{% url 'add_recipe' %}">Create Recipe</a>
     </div>
-    <ul>
+    <ul class="recipe-list">
         {% for recipe in recipe_list %}
+            <li class='recipe'>
+                {% if recipe.picture %}
+                    <img src="{{ recipe.picture.url }}">
+                {% else %}
+                    <img src="{% static 'recipes/img/food-question-mark.jpg' %}">
+                {% endif %}
+            </li>
             <li><a href="{% url 'recipe' recipe.pk %}">"{{ recipe.name}}"</a> by {{ recipe.author }}, created at {{ recipe.created_on }}</li>
             <a class="button" href="{% url 'user_delete_recipe' recipe.pk %}">Delete</a>
-            {% endfor %}
+        {% endfor %}
     </ul>
+    <div class="paginator">
+        {% if page_obj.has_previous %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page=1">First</a>
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.previous_page_number }}">Back</a>
+        {% endif %}
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        {% if page_obj.has_next %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+        <form action="{% url 'recipes' %}" method="get">
+            <input type="text" name="search" value="{{ request.GET.search }}">
+            <button type="submit">search</button>
+        </form>
+    </div>
     
 {% endblock content %}

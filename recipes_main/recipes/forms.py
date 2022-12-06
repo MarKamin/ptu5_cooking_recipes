@@ -16,7 +16,6 @@ from django.forms import inlineformset_factory
 
 class RecipeCommentForm(forms.ModelForm):
         
-       
         class Meta:
             model = RecipeComment
             fields = ('comment', 'recipe', 'writer',)

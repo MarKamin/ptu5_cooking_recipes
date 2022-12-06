@@ -2,7 +2,7 @@
 {% block title %}{{ object }}{% endblock title %}
 {% block content %}
     <h1>"{{ object.name }}" recipe</h1>
-    <h3>By {{ object.author }} ({{ object.recipe.author.profile.profile_type }})</h3>
+    <h3>By {{ object.author }} ({{ object.author.profile.profile_type }})</h3>
     {% if object.picture %}
         <img src="{{ object.picture.url }}" class="recipe-photo"></img>
     {% endif %}
@@ -20,12 +20,21 @@
     <h2>Comments</h2>
     {% if user.is_authenticated %}
         <div class="comment-form">
-            <p>Comment if you have questions, or you have tried the recipe.</p>
+            <p>Comment if you have questions, or you have tried the recipe. Maybe you have some suggestions? Please share with us!</p>
             <form action="" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <p><button type="submit">Post Comment</button></p>
             </form>
         </div>
+    {% endif %}
+    {% if recipe.comments %}
+        {% for comment in recipe.comments.all %}
+            <div class='recipe-comment'>
+                <h4>By: <a href="{% url 'user' user.pk %}">{{ comment.writer }}</a> ({{ comment.writer.profile.profile_type }})
+                <span class='float-right'>{{ comment.created_on }}</span></h4>
+            <p>{{ comment.comment }}</p>
+            </div>
+        {% endfor %}    
     {% endif %}
 {% endblock content %}

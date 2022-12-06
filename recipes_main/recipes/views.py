@@ -30,7 +30,7 @@ def home(request):
 
 class RecipeListView(ListView):
     model = Recipe
-    paginate_by = 5
+    paginate_by = 1
     template_name = 'recipes/recipes_list.html'
 
     def get_context_data(self, **kwargs):
@@ -42,12 +42,16 @@ class RecipeListView(ListView):
             context['recipe'] = get_object_or_404(Recipe, id=recipe_id)
         return context
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     query = self.request.GET.get('query')
-    #     if query:
-    #         queryset = queryset.filter(Q(name__icontains=query) | Q(author__icontains=query))
-    #     return queryset
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(Q(name__icontains=search) | Q(steps__icontains=search))
+        recipe_id = self.request.GET.get('recipe_id')
+        if recipe_id:
+            queryset = queryset.filter(recipe__id=recipe_id)
+        return queryset
+
 
 class RecipeDetailView(FormMixin, DetailView):
     model = Recipe
