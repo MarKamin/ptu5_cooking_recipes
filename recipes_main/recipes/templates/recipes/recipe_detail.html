@@ -2,14 +2,30 @@
 {% block title %}{{ object }}{% endblock title %}
 {% block content %}
     <h1>"{{ object.name }}" recipe</h1>
-    <h3>By {{ object.author }} ({{ object.author.profile.profile_type }})</h3>
+    <h3>By {{ object.author }} ({{ object.recipe.author.profile.profile_type }})</h3>
     {% if object.picture %}
         <img src="{{ object.picture.url }}" class="recipe-photo"></img>
     {% endif %}
-    <p>Ingredients: {{ object.show_ingredients }}</p>
+    <p>Ingredients:
+        {% for i in object.ingredients.all %}
+            {{ i }}.
+        {% endfor %}
+    </p>
     <p>Instructions: {{ object.steps }}</p>
     <p>Duration: {{ object.duration }} min.</p>
     <p>Calories: {{ object.calories }} cal</p>
     <p>Servings: {{ object.servings }}</p>
     <p>Created on: {{ object.created_on }}</p>
+    <button><a href="{% url 'add_ingredient' %}" class="button">Add ingredients</a></button>
+    <h2>Comments</h2>
+    {% if user.is_authenticated %}
+        <div class="comment-form">
+            <p>Comment if you have questions, or you have tried the recipe.</p>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <p><button type="submit">Post Comment</button></p>
+            </form>
+        </div>
+    {% endif %}
 {% endblock content %}

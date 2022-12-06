@@ -4,10 +4,14 @@
     <h1>Welcome to Recipes Section</h1>
     <p>We hope you will find some thing that satisfes you, 
         we curently  have {{ recipes_count }} recipes in total.. Bon Apetite!</p>
+    <div>
+        <a class="button" href="{% url 'add_recipe' %}">Create Recipe</a>
+    </div>
     <ul>
         {% for recipe in recipe_list %}
             <li><a href="{% url 'recipe' recipe.pk %}">"{{ recipe.name}}"</a> by {{ recipe.author }}, created at {{ recipe.created_on }}</li>
-        {% endfor %}
+            <a class="button" href="{% url 'user_delete_recipe' recipe.pk %}">Delete</a>
+            {% endfor %}
     </ul>
-
+    
 {% endblock content %}

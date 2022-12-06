@@ -1,13 +1,19 @@
 from django.shortcuts import render
-from .models import Recipe
+from .models import Recipe, Ingredient
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView
+from django.views.generic.edit import CreateView
 from django.shortcuts import render, get_object_or_404  
 from django.contrib.auth import get_user_model
 from django.db.models import Count
 from userprofile.models import Profile
-
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse, reverse_lazy
+from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
+from .forms import RecipeCommentForm
+from django.views.generic.edit import FormMixin
 
 
 def home(request):
@@ -31,21 +37,46 @@ class RecipeListView(ListView):
         context = super().get_context_data(**kwargs)
         context['recipes_count'] = self.get_queryset().count()
         recipe_id = self.request.GET.get('recipe_id')
-        context['authors'] = User.objects.all()
+        context['recipes'] = Recipe.objects.all()
         if recipe_id:
-            context['recipe'] = get_object_or_404(User, id=recipe_id)
+            context['recipe'] = get_object_or_404(Recipe, id=recipe_id)
         return context
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        query = self.request.GET.get('query')
-        if query:
-            queryset = queryset.filter(Q(name__icontains=query) | Q(author__icontains=query))
-        return queryset
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     query = self.request.GET.get('query')
+    #     if query:
+    #         queryset = queryset.filter(Q(name__icontains=query) | Q(author__icontains=query))
+    #     return queryset
 
-class RecipeDetailView(DetailView):
+class RecipeDetailView(FormMixin, DetailView):
     model = Recipe
     template_name = 'recipes/recipe_detail.html'   
+    form_class = RecipeCommentForm
+
+    def get_success_url(self):
+        return reverse('recipe', kwargs={'pk': self.get_object().id})
+
+    def post(self, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            messages.error(self.request, _("Something went wrong"))
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.recipe = self.get_object()
+        form.instance.writer = self.request.user
+        form.save()
+        messages.success(self.request, _('Your review have been posted succesfully!'))
+        return super().form_valid(form)
+
+    def get_initial(self):
+        return {
+            'recipe': self.get_object(),
+            'writer': self.request.user,
+        }
 
 class UserListView(ListView):
     model = User
@@ -63,10 +94,55 @@ class UserRecipesListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(author=self.request.user).order_by('name')
+        queryset = queryset.filter(author=self.request.author).order_by('name')
         return queryset 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['rcp_count'] = self.get_queryset().count()
         return context
+
+class UserRecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Recipe
+    template_name = 'recipes/user_delete_recipe.html'
+    success_url = reverse_lazy('recipes')
+
+    def test_func(self):
+        recipe = self.get_object()
+        return self.request.user == recipe.author
+
+    def form_valid(self, form):
+        recipe = self.get_object()
+        if self.request.user == recipe.author:
+            messages.success(self.request, _('deleted'))
+        else:
+            messages.success(self.request, _('deletion canceled'))
+        return super().form_valid(form)
+
+class AddRecipeView(CreateView):
+    model = Recipe
+    # form_class = RecipeForm
+    fields = ['name', 'duration', 'calories', 'steps', 'calories', 'servings']
+    template_name = 'recipes/add_recipe.html'
+    success_url = reverse_lazy('recipes')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+ 
+class AddIngredientView(CreateView):
+    model = Ingredient
+    # form_class = IngredientForm
+    fields = ['ingredient', 'amount', 'metrics','recipe']
+    template_name = 'recipes/add_ingredient.html'
+    success_url = reverse_lazy('add_recipe')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+
+    
+
