@@ -5,6 +5,6 @@
     {% csrf_token %}
     <p>Are you sure you want to delete {{ object.recipe.name }} recipe?<p/>
     <p><button type="submit" class="button">YES</button>
-    <button><a href="{% url 'recipes' %}" class="button">NO</a></button>
+    <a href="{% url 'recipes' %}" class="button">NO</a>
 </form>
 {% endblock content %}

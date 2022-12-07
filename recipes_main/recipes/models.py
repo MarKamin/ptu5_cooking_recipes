@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.utils.html import format_html
 from django.urls import reverse
+from PIL import Image
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 User = get_user_model()
 # is ing i rcp foreign key
@@ -26,6 +28,14 @@ class Recipe(models.Model):
     # def show_ingredients(self) -> str:
     #     return ', '.join(ingredients.ingredient + ' ' +str(ingredients.amount)+' '+str( ingredients.metrics) for ingredients in self.ingredients.all()[:10])
     # show_ingredients.short_description = 'ingredient(s)'
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.picture:
+            picture = Image.open(self.picture.path)
+            if picture.width > 500 or picture.height > 500:
+                output_size = (400, 400)
+                picture.thumbnail(output_size)
+                picture.save(self.picture.path)
 
 
 class Ingredient(models.Model):
@@ -83,13 +93,11 @@ class RecipeComment(models.Model):
         ordering = ('-created_on',)
 
 class Rating(models.Model):
-    STARS = (
-        ('1', _("(1) Awful")),
-        ('2', _("(2) Bad")),
-        ('3', _("(3) Normal")),
-        ('4', _("(4) Deliciuos")),
-        ('5', _("(5) Amazing!")),
-    )
+    score = models.IntegerField(default=0,
+            validators=[
+                MaxValueValidator(5),
+                MinValueValidator(0),
+            ])
     recipe = models.ForeignKey(
         Recipe, 
         verbose_name=_("recipe"), 
@@ -100,10 +108,10 @@ class Rating(models.Model):
         verbose_name=_("rater"), 
         on_delete=models.CASCADE, 
         related_name='recipe_ratings')
-    stars = models.CharField(_('stars'), max_length=10, choices=STARS)
+    
 
     def __str__(self) -> str:
-        return f'{self.rater} gave {self.stars} star on "{self.recipe.name}" '
+        return str(self.pk)
 
     def get_rcp_name(self):
         return self.recipe.name

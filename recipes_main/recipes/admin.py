@@ -12,8 +12,8 @@ class IngredientAdmin(admin.ModelAdmin):
     list_display = ('ingredient', 'amount', 'metrics', 'recipe_name')
 
 
-class RatingAdmin(admin.ModelAdmin):
-    list_display = ('get_rcp_name', 'rater', 'stars')
+# class RatingAdmin(admin.ModelAdmin):
+#     list_display = ('get_rcp_name', 'rater', 'stars')
     
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -28,4 +28,4 @@ class RecipeAdmin(admin.ModelAdmin):
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(RecipeComment)
-admin.site.register(Rating, RatingAdmin)
+admin.site.register(Rating)

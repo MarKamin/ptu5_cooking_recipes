@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Recipe, Ingredient
+from .models import Recipe, Ingredient, Rating
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.views.generic import ListView, DetailView, DeleteView
@@ -14,6 +14,11 @@ from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 from .forms import RecipeCommentForm
 from django.views.generic.edit import FormMixin
+from django.http import JsonResponse
+
+def homey(request):
+    context = {}
+    return render(request, 'recipes/homey.html', context)
 
 
 def home(request):
@@ -30,7 +35,7 @@ def home(request):
 
 class RecipeListView(ListView):
     model = Recipe
-    paginate_by = 1
+    paginate_by = 2
     template_name = 'recipes/recipes_list.html'
 
     def get_context_data(self, **kwargs):
@@ -81,6 +86,7 @@ class RecipeDetailView(FormMixin, DetailView):
             'recipe': self.get_object(),
             'writer': self.request.user,
         }
+    
 
 class UserListView(ListView):
     model = User
@@ -91,14 +97,14 @@ class UserDetailView(DetailView):
     model = Profile
     template_name = 'recipes/profile_detail.html' 
 
-class UserRecipesListView(ListView):
+class UserRecipesListView(LoginRequiredMixin, ListView):
     model = Recipe
     paginate_by = 5
     template_name = 'recipes/user_recipes_list.html'
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(author=self.request.author).order_by('name')
+        queryset = queryset.filter(author=self.request.user).order_by('name')
         return queryset 
 
     def get_context_data(self, **kwargs):
@@ -106,14 +112,15 @@ class UserRecipesListView(ListView):
         context['rcp_count'] = self.get_queryset().count()
         return context
 
+
 class UserRecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Recipe
     template_name = 'recipes/user_delete_recipe.html'
     success_url = reverse_lazy('recipes')
 
     def test_func(self):
-        recipe = self.get_object()
-        return self.request.user == recipe.author
+        recipe_instance = self.get_object()
+        return self.request.user == recipe_instance.author
 
     def form_valid(self, form):
         recipe = self.get_object()
@@ -140,13 +147,27 @@ class AddIngredientView(CreateView):
     # form_class = IngredientForm
     fields = ['ingredient', 'amount', 'metrics','recipe']
     template_name = 'recipes/add_ingredient.html'
-    success_url = reverse_lazy('add_recipe')
+    success_url = reverse_lazy('add_ingredient')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+def main_rating(request):
+    obj = Rating.objects.filter(score=0).first()
+    context = {
+        'object': obj
+    }
+    return render(request, 'recipe/recipe_detail.html', context)
 
-
+def rate_recipe(request):
+    if request.method == 'POST':
+        el_id = request.POST.get('el_id')
+        val = request.POST.get('val')
+        obj = Rating.objects.get(id=el_id)
+        obj.score = val
+        obj.save()
+        return JsonResponse({'success':'true', 'score': val}, safe=False)
+    return JsonResponse({'success':'false'})
     
 

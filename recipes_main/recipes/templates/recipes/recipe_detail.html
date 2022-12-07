@@ -1,16 +1,35 @@
 {% extends 'recipes/base.html' %}
+{% load static %}
+{% load ratings %}
+<html>
 {% block title %}{{ object }}{% endblock title %}
 {% block content %}
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script>
+    $(document).ready(function() {
+        console.log($.ajax);
+    });
+    </script>
     <h1>"{{ object.name }}" recipe</h1>
     <h3>By {{ object.author }} ({{ object.author.profile.profile_type }})</h3>
- 
+    {% if object.picture %}
+        <img src="{{ object.picture.url }}" class="recipe-photo"></img>
+    {% endif %}
+    <p>Ingredients:
+        {% for i in object.ingredients.all %}
+            {{ i }}.
+        {% endfor %}
     </p>
     <p>Instructions: {{ object.steps }}</p>
     <p>Duration: {{ object.duration }} min.</p>
     <p>Calories: {{ object.calories }} cal</p>
     <p>Servings: {{ object.servings }}</p>
     <p>Created on: {{ object.created_on }}</p>
+   
     <button><a href="{% url 'add_ingredient' %}" class="button">Add ingredients</a></button>
+    <div>
+    {% ratings object %}
+ 
     <h2>Comments</h2>
     {% if user.is_authenticated %}
         <div class="comment-form">
@@ -31,4 +50,5 @@
             </div>
         {% endfor %}    
     {% endif %}
+  
 {% endblock content %}
