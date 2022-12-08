@@ -4,6 +4,6 @@
 {% block content %}
 <h3>Hey {{  user }}, you currently have {{ rcp_count }} recipes added</h3>
 {% for recipe in recipe_list %}
-    <p> "{{ recipe.name }}", {{ recipe.created_on }}</p>
+    <p> <a href="{% url 'recipe' recipe.pk %}">"{{ recipe.name }}"</a>, {{ recipe.created_on }}</p>
 {% endfor %}
 {% endblock content %}

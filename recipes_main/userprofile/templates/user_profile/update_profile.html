@@ -13,10 +13,14 @@
         <div>{{ user_form.last_name }}</div>
         <div>{{ user_form.email.label }}</div>
         <div>{{ user_form.email }}</div>
-        <div>{{ profile_form.photo.label }}</div>
-        <div>{{ profile_form.photo }}</div>
-        <div>{{ profile_form.profile_type.label }}</div>
-        <div>{{ profile_form.profile_type }}</div>
+        {% if user.profile and user.profile.photo %}
+        <div>
+            <div>{{ profile_form.profile_type.label }}</div>
+            <img src="{{ user.profile.photo.url }}" class="user-profile-photo">
+        </div>
+        {% endif %}
+        {% comment %} <div>{{ profile_form.profile_type.label }}</div>
+        <div>{{ profile_form.profile_type }}</div> {% endcomment %}
         <div></div>
         <div>{{ profile_form.about.label }}</div>
         <div>{{ profile_form.about }}</div>

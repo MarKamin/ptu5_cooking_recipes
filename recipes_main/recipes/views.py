@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Recipe, Ingredient, Rating
+from .models import Recipe, Ingredient, Rating, RecipeComment
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.views.generic import ListView, DetailView, DeleteView
@@ -16,10 +16,6 @@ from .forms import RecipeCommentForm
 from django.views.generic.edit import FormMixin
 from django.http import JsonResponse
 
-def homey(request):
-    context = {}
-    return render(request, 'recipes/homey.html', context)
-
 
 def home(request):
     recipes_count = Recipe.objects.all().count()
@@ -27,20 +23,23 @@ def home(request):
     # authors_count = Recipe.objects.annotate(recipes_count=Count('name'))
     for rcp in Recipe.objects.annotate(recipes_count=Count('name')):
         print(rcp.recipes_count)
-        
+    recipe_comments = RecipeComment.objects.all()      
 
     context = { 'recipes_count': recipes_count,
-                'rcp_count': recipes_count}
+                'rcp_count': recipes_count,
+                'recipe_comments': recipe_comments}
     return render(request, 'recipes/home.html', context)
 
 class RecipeListView(ListView):
     model = Recipe
-    paginate_by = 2
+    paginate_by = 4
     template_name = 'recipes/recipes_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['recipes_count'] = self.get_queryset().count()
+        context['recipe_comments'] = RecipeComment.objects.all() 
+        # context['is_it_new'] = RecipeComment.is_comment_fresh()
         recipe_id = self.request.GET.get('recipe_id')
         context['recipes'] = Recipe.objects.all()
         if recipe_id:
@@ -99,7 +98,7 @@ class UserDetailView(DetailView):
 
 class UserRecipesListView(LoginRequiredMixin, ListView):
     model = Recipe
-    paginate_by = 5
+    paginate_by = 20
     template_name = 'recipes/user_recipes_list.html'
 
     def get_queryset(self):

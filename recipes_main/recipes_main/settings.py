@@ -129,6 +129,16 @@ MEDIA_ROOT = BASE_DIR.joinpath('media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = local_settings.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = local_settings.EMAIL_HOST_PASSWORD
+
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 60
 
 LOGIN_REDIRECT_URL = "/"
+
+STAR_RATINGS_STAR_HEIGHT = 25
+STAR_RATINGS_RANGE = 5

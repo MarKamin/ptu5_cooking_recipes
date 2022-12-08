@@ -1,9 +1,18 @@
 {% extends 'recipes/base.html' %}
 {% block title %}{{ object }}{% endblock title %}
 {% block content %}
-<h1>Hi!</h1>
-    <h2>{{ object.user }}</h2>
-    <p>Type: {{ object.profile_type }}</p>
-    <h3>About information: {{ object.about }}</h3>
-    <h3><a href="{% url 'user_recipes_list' %}">User recipes</a></h3>
+
+<h2>{{ object.user }}</h2>
+{% if object.user.profile and object.user.profile.photo %}
+<div>
+    <img src="{{ object.user.profile.photo.url }}" class="user-profile-photo">
+</div>
+{% endif %}
+<p>Type: {{ object.profile_type }}</p>
+<h3>About information:</h3>
+<p> {{ object.about }}</p>
+<h3>User recipes</h3>
+<p>{% for i in object.user.recipes.all %}<p>
+    {{ i }}
+    {% endfor %}
 {% endblock content %}

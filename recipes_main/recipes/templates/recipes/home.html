@@ -3,7 +3,32 @@
 {% block title %}Welcome to {{ block.super }}{% endblock title %}}
 {% block content %}
 <h1>Recipes for Everyone</h1>
+<div class="left-bar">
+    <h3>Latest comments</h3>
+    <ul>
+        {% for com in recipe_comments|slice:":5" %}
+            <li class="">{{ com.writer}} wrote </li>
+            <li class="">"{{ com.comment|truncatechars:10}}" at</li>
+            <li class="">{{ com.created_on }} on</li>
+            <li class="">"{{ com.recipe.name }}" recipe<a>{{recipe}}</a></li>
+            <br>
+        {% endfor %}
+    </ul>
+</div>
 <ul>
     <li>We have {{ recipes_count }} recipes in total written by {{ rcp_count }} authors </li>
+    <li>We have {{ recipes_count }} recipes in total written by {{ rcp_count }} authors </li>
+    <li>We have {{ recipes_count }} recipes in total written by {{ rcp_count }} authors </li>
+    <li>We have {{ recipes_count }} recipes in total written by {{ rcp_count }} authors </li>
+    <li>We have {{ recipes_count }} recipes in total written by {{ rcp_count }} authors </li>
 </ul>
+    <div>
+        <p>recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by
+            recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by
+            recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by
+            recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by<p>
+                recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by
+                recipes in total written byrecipes in total written byrecipes in total written by
+    </div>
+
 {% endblock content %}

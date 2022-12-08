@@ -3,22 +3,34 @@
 {% block title %}Recipes Section{% endblock title %}
 {% block content %}
     <h1>Welcome to Recipes Section</h1>
+    <div class="left-bar">
+        <h3>Latest comments</h3>
+        <ul>
+            {% for com in recipe_comments|slice:":5" %}
+                <li class="">{{ com.writer }} wrote </li>
+                <li class="">"{{ com.comment|truncatechars:10}}" on</li>
+                <li class="">"{{ com.recipe.name }}" recipe<a>{{recipe}} at</a></li>
+                <li class="">{{ com.created_on }}</li>
+                <hr>
+            {% endfor %}
+        </ul>
+    </div>
     <p>We hope you will find some thing that satisfes you, 
         we curently  have {{ recipes_count }} recipes in total.. Bon Apetite!</p>
-    <div>
-        <a class="button" href="{% url 'add_recipe' %}">Create Recipe</a>
+    <div class='create-button'>
+        <a class="button" href="{% url 'add_recipe' %}">Add a Recipe</a>
     </div>
     <ul class="recipe-list">
         {% for recipe in recipe_list %}
             <li class='recipe'>
+                <a href="{% url 'recipe' recipe.pk %}">
                 {% if recipe.picture %}
                     <img src="{{ recipe.picture.url }}">
                 {% else %}
                     <img src="{% static 'recipes/img/food-question-mark.jpg' %}">
                 {% endif %}
+            "{{ recipe.name}}"</a> by {{ recipe.author }}, created at {{ recipe.created_on }} <a class="button" href="{% url 'user_delete_recipe' recipe.pk %}">Delete</a>
             </li>
-            <li><a href="{% url 'recipe' recipe.pk %}">"{{ recipe.name}}"</a> by {{ recipe.author }}, created at {{ recipe.created_on }}</li>
-            <a class="button" href="{% url 'user_delete_recipe' recipe.pk %}">Delete</a>
         {% endfor %}
     </ul>
     <div class="paginator">

@@ -5,6 +5,7 @@ from django.utils.html import format_html
 from django.urls import reverse
 from PIL import Image
 from django.core.validators import MaxValueValidator, MinValueValidator
+from datetime import datetime, timedelta
 
 User = get_user_model()
 # is ing i rcp foreign key
@@ -91,6 +92,10 @@ class RecipeComment(models.Model):
     
     class Meta:
         ordering = ('-created_on',)
+        
+    @property
+    def is_comment_fresh():
+        return (datetime.now() - timedelta(minutes=3))
 
 class Rating(models.Model):
     score = models.IntegerField(default=0,

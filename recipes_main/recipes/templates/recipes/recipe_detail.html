@@ -5,16 +5,12 @@
 {% block title %}{{ object }}{% endblock title %}
 {% block content %}
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-    <script>
-    $(document).ready(function() {
-        console.log($.ajax);
-    });
-    </script>
     <h1>"{{ object.name }}" recipe</h1>
     <h3>By {{ object.author }} ({{ object.author.profile.profile_type }})</h3>
-    {% if object.picture %}
+    <div class='picture-detail-view'>{% if object.picture %}
         <img src="{{ object.picture.url }}" class="recipe-photo"></img>
     {% endif %}
+    </div>
     <p>Ingredients:
         {% for i in object.ingredients.all %}
             {{ i }}.
@@ -25,11 +21,13 @@
     <p>Calories: {{ object.calories }} cal</p>
     <p>Servings: {{ object.servings }}</p>
     <p>Created on: {{ object.created_on }}</p>
-   
-    <button><a href="{% url 'add_ingredient' %}" class="button">Add ingredients</a></button>
-    <div>
-    {% ratings object %}
- 
+    
+    <p><button><a href="{% url 'add_ingredient' %}" class="button">Add ingredients</a></button></p>
+    <hr>
+    <div class="ratings">
+            ...
+        {% ratings object %}
+    </div>
     <h2>Comments</h2>
     {% if user.is_authenticated %}
         <div class="comment-form">
@@ -44,9 +42,10 @@
     {% if recipe.comments %}
         {% for comment in recipe.comments.all %}
             <div class='recipe-comment'>
-                <h4>By: <a href="{% url 'user' user.pk %}">{{ comment.writer }}</a> ({{ comment.writer.profile.profile_type }})
+                <h4>By: {{ comment.writer }} ({{ comment.writer.profile.profile_type }})
                 <span class='float-right'>{{ comment.created_on }}</span></h4>
             <p>{{ comment.comment }}</p>
+            <hr>
             </div>
         {% endfor %}    
     {% endif %}
