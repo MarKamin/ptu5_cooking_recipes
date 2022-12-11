@@ -6,6 +6,7 @@ from django.urls import reverse
 from PIL import Image
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime, timedelta
+from tinymce.models import HTMLField
 
 User = get_user_model()
 # is ing i rcp foreign key
@@ -16,7 +17,7 @@ class Recipe(models.Model):
         verbose_name=_("author"), 
         on_delete=models.CASCADE, 
         related_name='recipes')
-    steps = models.TextField(_('steps'), max_length=10000)
+    steps = HTMLField(_('steps'), max_length=10000)
     duration = models.DecimalField(_('duration(min)'), decimal_places=0, max_digits=4, null=True)
     calories = models.DecimalField(_('calories'), decimal_places=0, max_digits=4, null=True)
     servings = models.DecimalField(_('servings'), decimal_places=0, max_digits=4, null=True)
@@ -42,21 +43,23 @@ class Recipe(models.Model):
 
 class Ingredient(models.Model):
     ingredient = models.CharField(_('ingredient'), max_length=1000, null=True, blank=True)
-    amount = models.DecimalField(_('amount'), decimal_places=0, max_digits=4, null=True, blank=True)
+    amount = models.DecimalField(_('amount'), decimal_places=2, max_digits=10, null=True, blank=True)
     METRICS = (
-        ('mg', _("miligram(s)")),
-        ('g', _("gram(s)")),
-        ('Kg', _("kilogram(s)")),
-        ('ml', _("mililiter(s)")),
-        ('L', _("liter(s)")),
+        ('mg.', _("miligram(s)")),
+        ('g.', _("gram(s)")),
+        ('Kg.', _("kilogram(s)")),
+        ('pound', _("pound(s)")),
+        ('ml.', _("mililiter(s)")),
+        ('L.', _("liter(s)")),
+        ('gallon', _("gallon(s)")),
         ('Cup', _("cup(s)")),
-        ('Tspn', _("tea spoon(s)")),
-        ('Tblspn', _("table spoon(s)")),
-        ('Oz', _("Oz")),
+        ('Tspn.', _("tea spoon(s)")),
+        ('Tblspn.', _("table spoon(s)")),
+        ('Oz.', _("Oz")),
         ('whole', _("Whole"))
     )
     
-    metrics = models.CharField(_('metrics'), max_length=6, choices=METRICS, default='g')
+    metrics = models.CharField(_('metrics'), max_length=8, choices=METRICS, default='g')
     recipe = models.ForeignKey(Recipe, 
         verbose_name=_("recipe"), 
         on_delete=models.CASCADE, 
@@ -65,11 +68,11 @@ class Ingredient(models.Model):
     def recipe_name(self):
         return f'{self.recipe.name}'
 
-    def __str__(self) -> str:
-        if self.metrics == 'whole':
-            return f'{int(self.amount)} {self.metrics} {self.ingredient}'
-        else:
+    def __str__(self):
+        if self.metrics == 'whole' or 'Tblspn':
             return f'{self.amount} {self.metrics} {self.ingredient}'
+        else:
+            return f'{float(self.amount)} {self.metrics} {self.ingredient}'
     
     # def all_ingredients(self):
     

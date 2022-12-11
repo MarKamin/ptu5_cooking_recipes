@@ -10,20 +10,38 @@
             <li class=""><b>{{ com.writer}}</b> wrote </li>
             <li class="">"{{ com.comment|truncatechars:10}}" at</li>
             <li class="">{{ com.created_on }} on</li>
-            <li class=""><b>"{{ com.recipe.name }}"</b> recipe<a>{{recipe}}</a></li>
-            <br>
+            <li class=""><b>"{{ com.recipe.name|truncatechars:14 }}"</b> recipe<a>{{recipe}}</a></li>
+            <hr>
         {% endfor %}
     </ul>
 </div>  
     <p>We have <b>{{ recipes_count }}</b> recipes in total written by <b>{{ authors_count }}</b> authors. There are <b>{{ users_count }}</b> registrated users, who have written <b>{{ comments_count }}</b> comments in total!</p>
 
     <div>
-        <p>recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by
-            recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by
-            recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by
-            recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by<p>
-                recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by
-                recipes in total written byrecipes in total written byrecipes in total written by
+        <h3>Chirstmas is comming!</h3>
+        <p>Christmas is a time for joy, celebration, and of course, delicious food. As the temperatures outside begin to drop and 
+            the days get shorter, there is nothing better than spending time in the kitchen, cooking up warm, comforting dishes 
+            to enjoy with friends and family.
+
+            One of the most iconic dishes associated with Christmas is roast turkey, which is often the centerpiece of the 
+            Christmas meal. This classic dish is typically made by roasting a whole turkey in the oven, basting it with butter 
+            or oil to keep it moist, and serving it with a variety of tasty side dishes like stuffing, gravy, and cranberry sauce.
+            
+            Another popular Christmas dish is ham, which is often glazed with a sweet and tangy sauce made from honey, brown 
+            sugar, and pineapple. This dish is perfect for feeding a crowd and can be sliced and served with a variety of 
+            different side dishes, such as roasted vegetables, mashed potatoes, and green beans.
+            
+            In addition to these classic dishes, many people also enjoy making sweet treats like Christmas cookies, fruitcake, 
+            and candies to share with their loved ones. These desserts are often decorated with festive colors and designs, making them a fun and enjoyable part of the holiday season.
+            <p>The joy of cooking during the Christmas season goes beyond just the delicious dishes that are created. It is also 
+            about spending time with loved ones, creating traditions, and making memories that will last a lifetime. For many people, the act of cooking and preparing a meal is a form of self-care and relaxation, allowing them to take a break from the busyness of everyday life and focus on the present moment.
+            
+            Additionally, the Christmas season is a great time to try out new recipes and expand your culinary skills. There are
+            countless recipes available online or in cookbooks that can provide inspiration and help you create unique and delicious dishes to share with your loved ones.
+            So why not gather your friends and family and get cooking this Christmas season? Whether you are a seasoned chef or just starting out in the kitchen, there is
+             something for everyone to enjoy during the holidays. And who knows, you may even discover a new passion for cooking along the way!
+            </p>
+            <p>By GTP3 ChatBot, 2012/12/11</p>
     </div>
 
 {% endblock content %}

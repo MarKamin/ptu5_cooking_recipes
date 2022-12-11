@@ -4,7 +4,7 @@ from .models import Ingredient, Recipe, RecipeComment
 
 class IngredientInline(admin.TabularInline):
     model = Ingredient
-    extra = 3
+    extra = 0
     fields = ('ingredient', 'amount', 'metrics')
     can_delete = True
 

@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'recipes',
     'userprofile',
+    'tinymce',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -136,9 +137,41 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = local_settings.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = local_settings.EMAIL_HOST_PASSWORD
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 60
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000
 
 LOGIN_REDIRECT_URL = "/"
 
 STAR_RATINGS_STAR_HEIGHT = 25
 STAR_RATINGS_RANGE = 5
+
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': "silver",
+    'branding': False,
+    'skin': 'oxide',
+    'height': 400,
+    'cleanup_on_startup': False,
+    'custom_undo_redo_levels': 20,
+    'selector': 'textarea',
+    'plugins': '''
+            textcolor save link image media preview codesample
+            table insertdatetime nonbreaking contextmenu directionality
+            searchreplace wordcount visualblocks visualchars code 
+            fullscreen autolink lists charmap print hr anchor pagebreak
+            ''',
+    'toolbar1': '''
+            fullscreen preview bold italic underline | fontselect,
+            fontsizeselect | forecolor backcolor | 
+            alignleft aligncenter alignright alignjustify | 
+            indent outdent | bullist numlist table |
+            | link image media | codesample |
+            ''',
+    'toolbar2': '''
+            visualblocks visualchars |
+            charmap hr pagebreak nonbreaking anchor | code |
+            ''',
+    'contextmenu': 'formats | link image',
+    'menubar': True,
+    'statusbar': True,
+}
+

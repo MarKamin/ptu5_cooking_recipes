@@ -7,6 +7,7 @@
     <h3><form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
+        {{ form.media }}
         <button class="button-85" role="button" class="button" type=submit />Update</a></button>
         <button class="button-85" role="button"><a href="{% url 'recipes' %}" class="button">Go Back</a></button>
     </form></h3>

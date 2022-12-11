@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 {% extends 'recipes/base.html' %}
 {% load static %}
 {% block title %}Recipes Section{% endblock title %}
@@ -7,16 +8,16 @@
         <h3>Latest comments</h3>
         <ul>
             {% for com in recipe_comments|slice:":5" %}
-                <li class="">{{ com.writer }} wrote </li>
+                <li class=""><b>{{ com.writer }}</b> wrote </li>
                 <li class="">"{{ com.comment|truncatechars:10}}" on</li>
-                <li class="">"{{ com.recipe.name }}" recipe<a>{{recipe}} at</a></li>
+                <li class=""><b>"{{ com.recipe.name|truncatechars:14 }}"</b> recipe<a>{{recipe}} at</a></li>
                 <li class="">{{ com.created_on }}</li>
                 <hr>
             {% endfor %}
         </ul>
     </div>
     <p>We hope you will find some thing that satisfes you, 
-        we curently  have {{ recipes_count }} recipes in total.. Bon Apetite!</p>
+        we curently  have <b>{{ recipes_count }}</b> recipes in total.. Bon Apetite!</p>
     <div class='create-button'>
         <p><button class="button-85" role="button"><a href="{% url 'add_recipe' %}" class="button">Add a Recipe</a></button></p>
     </div>
@@ -29,7 +30,7 @@
                 {% else %}
                     <img src="{% static 'recipes/img/food-question-mark.jpg' %}">
                 {% endif %}
-            "{{ recipe.name}}"</a> by {{ recipe.author }}, created at {{ recipe.created_on }} 
+            <b>"{{ recipe.name}}"</b></a> by <b>{{ recipe.author }}</b>, created at {{ recipe.created_on }} 
             <button class="button-10" role="button"><a href="{% url 'user_recipe_update' recipe.pk %}">Update</a></button>
             <button class="button-10" role="button"><a href="{% url 'user_delete_recipe' recipe.pk %}">Delete</a></button>      
         </li>

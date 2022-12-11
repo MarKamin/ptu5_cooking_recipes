@@ -11,25 +11,24 @@
         <img src="{{ object.picture.url }}" class="recipe-photo"></img>
     {% endif %}
     </div>
-    <p>Ingredients:
+    <p><b>Ingredients:</b>
         {% for i in object.ingredients.all %}
             {% comment %} <a href="{% url 'ingredient_detail' i.pk %}">{{ i }}.</a> {% endcomment %}
-            <a href="{% url 'ingredient-edit-form' i.id %}">{{ i }}.</a>
+            <a href="{% url 'ingredient-edit-form' i.id %}">{{ i }}<b> | </b></a>
             {% comment %} <div id="ingredient-detail">{% include 'recipes/ingredient_detail.html' %}</div> {% endcomment %}
-        {% endfor %}<a>(Click on the ingrediet to edit)</a>
+        {% endfor %}<a><b>(Click on the ingrediet to edit)</b></a>
     </p>
-    <p>Instructions: {{ object.steps }}</p>
-    <p>Duration: {{ object.duration }} min.</p>
-    <p>Calories: {{ object.calories }} cal</p>
-    <p>Servings: {{ object.servings }}</p>
-    <p>Created on: {{ object.created_on }}</p>
+    <p><b>Steps:</b> {{ object.steps|safe }}</p>
+    <p><b>Duration:</b> {{ object.duration }} min.</p>
+    <p><b>Calories:</b> {{ object.calories }} cal</p>
+    <p><b>Servings:</b> {{ object.servings }}</p>
+    <p><b>Created on:</b> {{ object.created_on }}</p>
     <div class='buttons-details-div'>
         <button class="button-85" role="button"><a href="{% url 'add_ingredient' %}" class="button">Add ingredients</a></button>
         <button class="button-85" role="button"><a href="{% url 'user_recipe_update' recipe.pk %}" class="button">Edit recipe</a></button>
     <div>
     <hr>
     <div class="ratings">
-            ...
         {% ratings object %}
     </div>
     <h2>Comments</h2>

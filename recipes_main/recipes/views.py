@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
-from .forms import RecipeCommentForm, RecipeUpdateForm, IngredientEditForm
+from .forms import RecipeCommentForm, RecipeUpdateForm, IngredientEditForm, RecipeAddForm
 from django.views.generic.edit import FormMixin
 from django.db.models import Prefetch
 
@@ -126,20 +126,21 @@ class UserRecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def form_valid(self, form):
         recipe = self.get_object()
         if self.request.user == recipe.author:
-            messages.success(self.request, _('deleted'))
+            messages.success(self.request, _('Recipe successfully deleted!'))
         else:
             messages.success(self.request, _('deletion canceled'))
         return super().form_valid(form)
 
 class AddRecipeView(CreateView):
     model = Recipe
-    # form_class = RecipeForm
-    fields = ['name', 'duration', 'calories', 'steps', 'calories', 'servings', 'picture']
+    form_class = RecipeAddForm
+    # fields = ['name', 'duration', 'calories', 'steps', 'calories', 'servings', 'picture']
     template_name = 'recipes/add_recipe.html'
     success_url = reverse_lazy('recipes')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        messages.success(self.request, _('Recipe successfully added!'))
         return super().form_valid(form)
 
  

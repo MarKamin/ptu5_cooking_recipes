@@ -1,8 +1,10 @@
 from django.urls import path
 from . import views
+from django.urls import path, include
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('tinymce/', include('tinymce.urls')),
     path('recipes_list/', views.RecipeListView.as_view(), name='recipes'),
     path('users/', views.UserListView.as_view(), name='users'),
     path('recipe/<int:pk>/', views.RecipeDetailView.as_view(), name='recipe'),

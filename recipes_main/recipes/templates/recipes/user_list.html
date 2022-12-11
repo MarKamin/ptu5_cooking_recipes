@@ -2,10 +2,12 @@
 {% block title %}Users Section{% endblock title %}
 {% block content %}
     <h1>Welcome to Users Section</h1>
+    <div class="user-list">
     <ul>
         {% for user in user_list %}
             <li><a href="{% url 'user' user.pk %}">{{ user }}</a></li>
         {% endfor %}
     </ul>
+    <div>
 
 {% endblock content %}

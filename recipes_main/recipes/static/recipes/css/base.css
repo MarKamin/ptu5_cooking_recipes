@@ -159,7 +159,7 @@ ul.recipe-list li.recipe img {
 .left-bar {
     float: right;
     background-color: rgba(182, 176, 207, 0.3);
-    margin-top: 1px;
+    margin-top: 80px;
 }
 
 .button-85 {
@@ -260,4 +260,11 @@ ul.recipe-list li.recipe img {
   outline: 0;
 }
 
+.user-list {
+    padding-left: 20px;
+}
+
+.login-div {
+    padding-left: 40px;
+}
 
