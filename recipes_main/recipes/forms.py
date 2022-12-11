@@ -3,17 +3,6 @@ from .models import Recipe, Ingredient, RecipeComment
 from django.forms import inlineformset_factory
 
 
-# class RecipeForm(forms.ModelForm):
-
-#     class Meta:
-#         model = Recipe
-#         fields = ['name', 'duration', 'calories', 'steps', 'calories', 'servings']
-
-#     ingredients = forms.ModelMultipleChoiceField(
-#         queryset=Recipe.objects.filter(ingredients__amount=100),
-#         widget=forms.CheckboxSeMulectltiple
-#     )
-
 class RecipeCommentForm(forms.ModelForm):
         
         class Meta:
@@ -24,6 +13,22 @@ class RecipeCommentForm(forms.ModelForm):
                 'writer': forms.HiddenInput(),
             }
 
+class RecipeUpdateForm(forms.ModelForm):
+
+     class Meta:
+            model = Recipe
+            fields = ('name', 'steps', 'duration', 'calories', 'servings', 'picture')
+            widgets = {
+                'recipe': forms.HiddenInput(),
+                'writer': forms.HiddenInput(),
+            }
+
+
+class IngredientEditForm(forms.ModelForm):
+    
+    class Meta:
+        model = Ingredient
+        fields = ( 'ingredient', 'amount', 'metrics', 'recipe')
 
   
 

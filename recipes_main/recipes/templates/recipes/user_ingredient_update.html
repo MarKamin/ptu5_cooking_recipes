@@ -1,0 +1,14 @@
+{% extends 'recipes/base.html' %}
+{% load static %}
+{% block title %}Updating a recipe {{ block.super }}{% endblock title %}
+{% block content %}
+<div>
+    <form action="" method="post">
+        {% if ingredient %}<p>Recipe Updating</p>{% endif %}
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><button type="submit">Update</button></p>
+    </form>
+</div>
+{% endblock content %}
+{% comment %} delete?? {% endcomment %}

@@ -23,6 +23,7 @@ class Recipe(models.Model):
     picture = models.ImageField(_('picture'), upload_to='pictures', blank=True, null=True)
     created_on = models.DateTimeField('created_on', auto_now_add=True)
 
+
     def __str__(self) -> str:
         return f'"{self.name}" that requires {self.duration} min to make, has {self.servings} servings and about {self.calories} calories' 
 
@@ -97,29 +98,8 @@ class RecipeComment(models.Model):
     def is_comment_fresh():
         return (datetime.now() - timedelta(minutes=3))
 
-class Rating(models.Model):
-    score = models.IntegerField(default=0,
-            validators=[
-                MaxValueValidator(5),
-                MinValueValidator(0),
-            ])
-    recipe = models.ForeignKey(
-        Recipe, 
-        verbose_name=_("recipe"), 
-        on_delete=models.CASCADE, 
-        related_name="star")
-    rater = models.ForeignKey(
-        get_user_model(), 
-        verbose_name=_("rater"), 
-        on_delete=models.CASCADE, 
-        related_name='recipe_ratings')
-    
 
-    def __str__(self) -> str:
-        return str(self.pk)
 
-    def get_rcp_name(self):
-        return self.recipe.name
 
 
    

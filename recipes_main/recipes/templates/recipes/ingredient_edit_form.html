@@ -1,0 +1,14 @@
+{% extends 'recipes/base.html' %}
+{% load static %}
+{% block title %}Updating a recipe {{ block.super }}{% endblock title %}
+{% block content %}
+<div>
+    <h3>Update an ingredient</h3>
+    <h3><form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="button-85" role="button" class="button" type=submit />Confirm</a></button>
+        <button class="button-85" role="button"><a href="{% url 'user_ingredient_delete' ingredient.pk %}" class="button">Delete Ingredient</a></button>
+    </form></h3>
+</div>
+{% endblock content %}

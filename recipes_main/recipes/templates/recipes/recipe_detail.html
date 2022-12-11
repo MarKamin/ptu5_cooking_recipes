@@ -13,16 +13,20 @@
     </div>
     <p>Ingredients:
         {% for i in object.ingredients.all %}
-            {{ i }}.
-        {% endfor %}
+            {% comment %} <a href="{% url 'ingredient_detail' i.pk %}">{{ i }}.</a> {% endcomment %}
+            <a href="{% url 'ingredient-edit-form' i.id %}">{{ i }}.</a>
+            {% comment %} <div id="ingredient-detail">{% include 'recipes/ingredient_detail.html' %}</div> {% endcomment %}
+        {% endfor %}<a>(Click on the ingrediet to edit)</a>
     </p>
     <p>Instructions: {{ object.steps }}</p>
     <p>Duration: {{ object.duration }} min.</p>
     <p>Calories: {{ object.calories }} cal</p>
     <p>Servings: {{ object.servings }}</p>
     <p>Created on: {{ object.created_on }}</p>
-    
-    <p><button><a href="{% url 'add_ingredient' %}" class="button">Add ingredients</a></button></p>
+    <div class='buttons-details-div'>
+        <button class="button-85" role="button"><a href="{% url 'add_ingredient' %}" class="button">Add ingredients</a></button>
+        <button class="button-85" role="button"><a href="{% url 'user_recipe_update' recipe.pk %}" class="button">Edit recipe</a></button>
+    <div>
     <hr>
     <div class="ratings">
             ...
@@ -35,7 +39,7 @@
             <form action="" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <p><button type="submit">Post Comment</button></p>
+                <p><button class="button-85" role="button" type="submit">Post Comment</button></p>
             </form>
         </div>
     {% endif %}

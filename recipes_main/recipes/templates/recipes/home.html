@@ -7,21 +7,16 @@
     <h3>Latest comments</h3>
     <ul>
         {% for com in recipe_comments|slice:":5" %}
-            <li class="">{{ com.writer}} wrote </li>
+            <li class=""><b>{{ com.writer}}</b> wrote </li>
             <li class="">"{{ com.comment|truncatechars:10}}" at</li>
             <li class="">{{ com.created_on }} on</li>
-            <li class="">"{{ com.recipe.name }}" recipe<a>{{recipe}}</a></li>
+            <li class=""><b>"{{ com.recipe.name }}"</b> recipe<a>{{recipe}}</a></li>
             <br>
         {% endfor %}
     </ul>
-</div>
-<ul>
-    <li>We have {{ recipes_count }} recipes in total written by {{ rcp_count }} authors </li>
-    <li>We have {{ recipes_count }} recipes in total written by {{ rcp_count }} authors </li>
-    <li>We have {{ recipes_count }} recipes in total written by {{ rcp_count }} authors </li>
-    <li>We have {{ recipes_count }} recipes in total written by {{ rcp_count }} authors </li>
-    <li>We have {{ recipes_count }} recipes in total written by {{ rcp_count }} authors </li>
-</ul>
+</div>  
+    <p>We have <b>{{ recipes_count }}</b> recipes in total written by <b>{{ authors_count }}</b> authors. There are <b>{{ users_count }}</b> registrated users, who have written <b>{{ comments_count }}</b> comments in total!</p>
+
     <div>
         <p>recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by
             recipes in total written byrecipes in total written byrecipes in total written byrecipes in total written by

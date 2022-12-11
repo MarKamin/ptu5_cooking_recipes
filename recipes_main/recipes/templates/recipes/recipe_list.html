@@ -18,7 +18,7 @@
     <p>We hope you will find some thing that satisfes you, 
         we curently  have {{ recipes_count }} recipes in total.. Bon Apetite!</p>
     <div class='create-button'>
-        <a class="button" href="{% url 'add_recipe' %}">Add a Recipe</a>
+        <p><button class="button-85" role="button"><a href="{% url 'add_recipe' %}" class="button">Add a Recipe</a></button></p>
     </div>
     <ul class="recipe-list">
         {% for recipe in recipe_list %}
@@ -29,8 +29,10 @@
                 {% else %}
                     <img src="{% static 'recipes/img/food-question-mark.jpg' %}">
                 {% endif %}
-            "{{ recipe.name}}"</a> by {{ recipe.author }}, created at {{ recipe.created_on }} <a class="button" href="{% url 'user_delete_recipe' recipe.pk %}">Delete</a>
-            </li>
+            "{{ recipe.name}}"</a> by {{ recipe.author }}, created at {{ recipe.created_on }} 
+            <button class="button-10" role="button"><a href="{% url 'user_recipe_update' recipe.pk %}">Update</a></button>
+            <button class="button-10" role="button"><a href="{% url 'user_delete_recipe' recipe.pk %}">Delete</a></button>      
+        </li>
         {% endfor %}
     </ul>
     <div class="paginator">
@@ -44,6 +46,7 @@
             <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Last</a>
         {% endif %}
         <form action="{% url 'recipes' %}" method="get">
+            <p>Search by recipe name or ingredient</p>
             <input type="text" name="search" value="{{ request.GET.search }}">
             <button type="submit">search</button>
         </form>

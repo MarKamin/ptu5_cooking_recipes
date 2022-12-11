@@ -3,8 +3,8 @@
 {% block content %}
 <form method="post" action="">
     {% csrf_token %}
-    <p>Are you sure you want to delete {{ object.recipe.name }} recipe?<p/>
-    <p><button type="submit" class="button">YES</button>
-    <a href="{% url 'recipes' %}" class="button">NO</a>
+    <p><b>Are you sure you want to permanently delete "{{ object.name }}" recipe?</b><p/>
+        <button class="button-85" role="button" class="button" type=submit />YES</a></button>
+        <button class="button-85" role="button"><a href="{% url 'recipes' %}">NO</a></button>  
 </form>
 {% endblock content %}

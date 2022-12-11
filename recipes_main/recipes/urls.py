@@ -11,6 +11,9 @@ urlpatterns = [
     path('user_delete_recipe/<int:pk>/', views.UserRecipeDeleteView.as_view(), name='user_delete_recipe'),
     path('add_recipe/', views.AddRecipeView.as_view(), name='add_recipe'),
     path('add_ingredient/', views.AddIngredientView.as_view(), name='add_ingredient'),
+    path('user_recipe_update/<int:pk>/', views.RecipeUpdateView.as_view(), name='user_recipe_update'),
+    path('ingredient_detail/<int:pk>/edit', views.IngredientsUpdateView.as_view(), name='ingredient-edit-form'),
+    path('ingredient_delete/<int:pk>/delete', views.IngredientDeleteView.as_view(), name='user_ingredient_delete'),
 ]
 
   

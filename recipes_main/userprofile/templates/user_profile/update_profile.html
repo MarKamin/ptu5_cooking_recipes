@@ -2,29 +2,30 @@
 {% block title %}Updating {{ block.super }}User Profile{% endblock title %}
 {% block content %}
 <h1>Updating User Profile</h1>
-<form action="" method="POST" enctype="multipart/form-data">
+<h3><form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ user_form.errors }}
     {{ profile_form.errors }}
-    <div class="table-grid form-grid">
-        <div>{{ user_form.first_name.label }}</div>
+    <div>
+        <div>{{ user_form.first_name.label }}:</div>
         <div>{{ user_form.first_name }}</div>
-        <div>{{ user_form.last_name.label }}</div>
+        <div>{{ user_form.last_name.label }}:</div>
         <div>{{ user_form.last_name }}</div>
-        <div>{{ user_form.email.label }}</div>
+        <div>{{ user_form.email.label }}:</div>
         <div>{{ user_form.email }}</div>
         {% if user.profile and user.profile.photo %}
         <div>
-            <div>{{ profile_form.profile_type.label }}</div>
             <img src="{{ user.profile.photo.url }}" class="user-profile-photo">
         </div>
         {% endif %}
-        {% comment %} <div>{{ profile_form.profile_type.label }}</div>
-        <div>{{ profile_form.profile_type }}</div> {% endcomment %}
+        <div>{{ profile_form.photo.label }}:</div>
+        <div>{{ profile_form.photo }}</div> 
+        <div>{{ profile_form.profile_type.label }}:</div>
+        <div>{{ profile_form.profile_type }}</div> 
         <div></div>
-        <div>{{ profile_form.about.label }}</div>
+        <div>{{ profile_form.about.label }}:</div>
         <div>{{ profile_form.about }}</div>
         <div></div><div><button type="submit">Update</button></div>
     </div>
-</form>
+</form></h3>
 {% endblock content %}

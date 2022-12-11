@@ -1,38 +1,40 @@
 from django.shortcuts import render
-from .models import Recipe, Ingredient, Rating, RecipeComment
+from .models import Recipe, Ingredient, RecipeComment
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.views.generic import ListView, DetailView, DeleteView
-from django.views.generic.edit import CreateView
-from django.shortcuts import render, get_object_or_404  
-from django.contrib.auth import get_user_model
+from django.views.generic.edit import CreateView, UpdateView
+from django.shortcuts import render, get_object_or_404
 from django.db.models import Count
 from userprofile.models import Profile
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
-from .forms import RecipeCommentForm
+from .forms import RecipeCommentForm, RecipeUpdateForm, IngredientEditForm
 from django.views.generic.edit import FormMixin
-from django.http import JsonResponse
+from django.db.models import Prefetch
+
 
 
 def home(request):
     recipes_count = Recipe.objects.all().count()
-    # authors_count = Recipe.objects.filter(author=1).first().count()
-    # authors_count = Recipe.objects.annotate(recipes_count=Count('name'))
-    for rcp in Recipe.objects.annotate(recipes_count=Count('name')):
-        print(rcp.recipes_count)
+    authors_count = User.objects.prefetch_related(Prefetch('recipes')).count()
+    # authors_count = Recipe.objects.filter(author=request.user).count()
     recipe_comments = RecipeComment.objects.all()      
+    users_count = User.objects.all().count()
+    comments_count = RecipeComment.objects.all().count() 
 
     context = { 'recipes_count': recipes_count,
-                'rcp_count': recipes_count,
-                'recipe_comments': recipe_comments}
+                'recipe_comments': recipe_comments,
+                'authors_count': authors_count,
+                'users_count': users_count,
+                'comments_count': comments_count }
     return render(request, 'recipes/home.html', context)
 
 class RecipeListView(ListView):
     model = Recipe
-    paginate_by = 4
+    paginate_by = 5
     template_name = 'recipes/recipes_list.html'
 
     def get_context_data(self, **kwargs):
@@ -132,7 +134,7 @@ class UserRecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class AddRecipeView(CreateView):
     model = Recipe
     # form_class = RecipeForm
-    fields = ['name', 'duration', 'calories', 'steps', 'calories', 'servings']
+    fields = ['name', 'duration', 'calories', 'steps', 'calories', 'servings', 'picture']
     template_name = 'recipes/add_recipe.html'
     success_url = reverse_lazy('recipes')
 
@@ -146,27 +148,78 @@ class AddIngredientView(CreateView):
     # form_class = IngredientForm
     fields = ['ingredient', 'amount', 'metrics','recipe']
     template_name = 'recipes/add_ingredient.html'
-    success_url = reverse_lazy('add_ingredient')
+    success_url = reverse_lazy('recipes')
+    
+
+    def form_valid(self, form):
+        form.instance.recipe.author = self.request.user
+        messages.success(self.request, _("The ingredient was updated sucessfully!"))
+        return super().form_valid(form)
+
+class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Recipe
+    form_class = RecipeUpdateForm
+    template_name = "recipes/user_recipe_update.html"
+    success_url = reverse_lazy('recipes')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        messages.success(self.request, _("The recipe was updated sucessfully!"))
         return super().form_valid(form)
 
-def main_rating(request):
-    obj = Rating.objects.filter(score=0).first()
-    context = {
-        'object': obj
-    }
-    return render(request, 'recipe/recipe_detail.html', context)
+    def test_func(self):
+        recipe_instance = self.get_object()
+        return self.request.user == recipe_instance.author
 
-def rate_recipe(request):
-    if request.method == 'POST':
-        el_id = request.POST.get('el_id')
-        val = request.POST.get('val')
-        obj = Rating.objects.get(id=el_id)
-        obj.score = val
-        obj.save()
-        return JsonResponse({'success':'true', 'score': val}, safe=False)
-    return JsonResponse({'success':'false'})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['recipe'] = self.get_object()
+        return context
+
+class IngredientsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Ingredient
+    form_class = IngredientEditForm
+    template_name = 'recipes/ingredient_edit_form.html'
+    success_url = reverse_lazy('recipes')
+    
+    def test_func(self):
+        ingredient_instance = self.get_object()
+        return self.request.user == ingredient_instance.recipe.author
+
+    def form_valid(self, form):
+        form.instance.recipe.author = self.request.user
+        messages.success(self.request, "Ingredient updated")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ingredient'] = self.get_object()
+        return context
+
+class IngredientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Ingredient
+    template_name = 'recipes/user_ingredient_delete.html'
+    success_url = reverse_lazy('recipes')
+
+    def test_func(self):
+        ingredient = self.get_object()
+        return self.request.user == ingredient.recipe.author
+
+    def form_valid(self, form):
+        ingredient = self.get_object()
+        if self.request.user == ingredient.recipe.author:
+            messages.success(self.request, _('Ingredient deleted'))
+        else:
+            messages.success(self.request, _('Ingredient deletion canceled'))
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ingredient'] = self.get_object()
+        return context
+
+ 
+
+      
     
 

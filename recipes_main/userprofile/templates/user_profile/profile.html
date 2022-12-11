@@ -14,11 +14,11 @@
             {{ form.as_p }}
         <input type = "submit" value = "Submit">
         </form> {% endcomment %}
-        <p>Name: {% if user.first_name %}{{ user.first_name }}{% else %} Mr/Mrs. ? <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
-        <p>Last Name: {% if user.last_name %}{{ user.last_name }}{% else %} Mr/Mrs. ? <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
-        <p>Email: {% if user.email %}{{ user.email }}{% else %} None. <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
-        <p>Type: {% if user.profile.profile_type %} {{user.profile.profile_type }}{% else %} No type selected >> <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
-        <p>About: {% if user.profile.profile_type %} {{user.profile.about }}{% else %} Click to provide details about you >> <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
+        <p><b>Name:</b> {% if user.first_name %}{{ user.first_name }}{% else %} Mr/Mrs. ? <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
+        <p><b>Last Name:</b> {% if user.last_name %}{{ user.last_name }}{% else %} Mr/Mrs. ? <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
+        <p><b>Email:</b> {% if user.email %}{{ user.email }}{% else %} None. <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
+        <p><b>Type:</b> {% if user.profile.profile_type %} {{user.profile.profile_type }}{% else %} No type selected >> <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
+        <p><b>About:</b> {% if user.profile.profile_type %} {{user.profile.about }}{% else %} Click to provide details about you >> <a href="{% url 'update_profile' %}">Update</a> profile information.{% endif %}</p>
     </div>
 
 </div>

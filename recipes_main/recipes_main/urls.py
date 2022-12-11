@@ -17,15 +17,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from recipes.views import rate_recipe, main_rating
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('recipes.urls')),
     path('', include('userprofile.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('rate/', main_rating, name='main-rating'),
-    path('rate/', rate_recipe, name='rate-recipe'),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
 + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

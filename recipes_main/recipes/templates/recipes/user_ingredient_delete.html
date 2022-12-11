@@ -1,0 +1,10 @@
+{% extends 'recipes/base.html' %}
+{% block title %}Deleting ingredient {{ block.super }}{% endblock title %}
+{% block content %}
+<form method="post" action="">
+    {% csrf_token %}
+    <p>Are you sure you want to remove {{ object.amount }}{{ object.metrics }} {{ object.ingredient }} current ingredient from your "{{ object.recipe.name }}" recipe?<p/>
+    <button class="button-85" role="button" class="button" type=submit />YES</a></button>
+    <button class="button-85" role="button"><a href="{% url 'recipes' %}">NO</a></button>  
+</form>
+{% endblock content %}
