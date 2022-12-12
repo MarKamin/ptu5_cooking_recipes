@@ -51,14 +51,8 @@ def profile(request):
     profile.user = request.user
     profile.save()
     context = {}
-    # if request.method == "POST":
-    #     form = ProfileTypeForm(request.POST or None)
-    #     if form.is_valid():
-    #         form.save()
-    # context['form'] = form
-    # # context['profile'] = profile
-    return render( request, 'user_profile/profile.html', context)
 
+    return render( request, 'user_profile/profile.html', context)
 
 @login_required
 def update_profile(request):
@@ -68,7 +62,7 @@ def update_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request, f" _('User') {request.user.username} profile updated.")
+            messages.success(request, f"Your profile successfully updated.")
             return redirect('profile')
     else:
         user_form = UserUpdateForm(instance=request.user)

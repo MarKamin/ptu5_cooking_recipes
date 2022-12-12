@@ -18,8 +18,11 @@
     </div>
     <p>We hope you will find some thing that satisfes you, 
         we curently  have <b>{{ recipes_count }}</b> recipes in total.. Bon Apetite!</p>
-    <div class='create-button'>
-        <p><button class="button-85" role="button"><a href="{% url 'add_recipe' %}" class="button">Add a Recipe</a></button></p>
+        <p>Have some ideas? <button class="button-85" role="button"><a href="{% url 'add_recipe' %}" class="button">Add a Recipe</a></button></p>
+    <div>
+        <form action="{% url 'recipes' %}" method="get">
+            <p>Search by recipe name or ingredient: <input type="text" name="search" value="{{ request.GET.search }}"> <button button class="button-85" role="button" type="submit">search</button></p>
+        </form>
     </div>
     <ul class="recipe-list">
         {% for recipe in recipe_list %}
@@ -46,11 +49,6 @@
             <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
             <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Last</a>
         {% endif %}
-        <form action="{% url 'recipes' %}" method="get">
-            <p>Search by recipe name or ingredient</p>
-            <input type="text" name="search" value="{{ request.GET.search }}">
-            <button type="submit">search</button>
-        </form>
     </div>
     
 {% endblock content %}

@@ -188,7 +188,7 @@ ul.recipe-list li.recipe img {
     #f6ff00,
     #b7dc30,
     #fffb00,
-    #b7dc30,
+    #88a911,
     #fffb00,
     #b7dc30,
     #fffb00,
@@ -267,4 +267,44 @@ ul.recipe-list li.recipe img {
 .login-div {
     padding-left: 40px;
 }
+.paginator {
+    margin: 0.5rem;
+    padding-left: 4rem;
+}
 
+.paginator a, .paginator span {
+    display: inline-block;
+    padding: 0.25rem;
+    margin: 1px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    /* border reik paduot 3 argumentus */
+    border-radius: 1rem;
+}
+
+.paginator a:hover {
+    background-color: rgb(183, 202, 86);
+}
+
+.paginator span {
+    background-color: rgb(187, 230, 47);
+    color: #abd;
+}
+
+.paginator a {
+    background-color: rgb(177, 189, 34);
+}
+
+.paginator form {
+    display: inline-block;
+}
+
+input[type="text"],input[type="number"],input[type="email"], textarea {
+
+    background-color : rgb(206, 214, 119);
+  
+  }
+
+.profile-img {
+    border-radius: 1000px;
+}

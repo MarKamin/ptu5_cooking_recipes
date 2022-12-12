@@ -19,15 +19,13 @@ from django.db.models import Prefetch
 
 def home(request):
     recipes_count = Recipe.objects.all().count()
-    authors_count = User.objects.prefetch_related(Prefetch('recipes')).count()
-    # authors_count = Recipe.objects.filter(author=request.user).count()
     recipe_comments = RecipeComment.objects.all()      
     users_count = User.objects.all().count()
     comments_count = RecipeComment.objects.all().count() 
 
     context = { 'recipes_count': recipes_count,
                 'recipe_comments': recipe_comments,
-                'authors_count': authors_count,
+                # 'authors_count': authors_count,
                 'users_count': users_count,
                 'comments_count': comments_count }
     return render(request, 'recipes/home.html', context)
@@ -79,7 +77,7 @@ class RecipeDetailView(FormMixin, DetailView):
         form.instance.recipe = self.get_object()
         form.instance.writer = self.request.user
         form.save()
-        messages.success(self.request, _('Your review have been posted succesfully!'))
+        messages.success(self.request, _('Your comment have been posted succesfully!'))
         return super().form_valid(form)
 
     def get_initial(self):

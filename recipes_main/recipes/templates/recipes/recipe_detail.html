@@ -13,9 +13,7 @@
     </div>
     <p><b>Ingredients:</b>
         {% for i in object.ingredients.all %}
-            {% comment %} <a href="{% url 'ingredient_detail' i.pk %}">{{ i }}.</a> {% endcomment %}
             <a href="{% url 'ingredient-edit-form' i.id %}">{{ i }}<b> | </b></a>
-            {% comment %} <div id="ingredient-detail">{% include 'recipes/ingredient_detail.html' %}</div> {% endcomment %}
         {% endfor %}<a><b>(Click on the ingrediet to edit)</b></a>
     </p>
     <p><b>Steps:</b> {{ object.steps|safe }}</p>

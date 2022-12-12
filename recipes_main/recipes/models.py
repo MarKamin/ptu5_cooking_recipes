@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 from tinymce.models import HTMLField
 
 User = get_user_model()
-# is ing i rcp foreign key
 
 class Recipe(models.Model):
     name = models.CharField(_('name'), max_length=100)
@@ -28,9 +27,6 @@ class Recipe(models.Model):
     def __str__(self) -> str:
         return f'"{self.name}" that requires {self.duration} min to make, has {self.servings} servings and about {self.calories} calories' 
 
-    # def show_ingredients(self) -> str:
-    #     return ', '.join(ingredients.ingredient + ' ' +str(ingredients.amount)+' '+str( ingredients.metrics) for ingredients in self.ingredients.all()[:10])
-    # show_ingredients.short_description = 'ingredient(s)'
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.picture:
@@ -39,7 +35,6 @@ class Recipe(models.Model):
                 output_size = (400, 400)
                 picture.thumbnail(output_size)
                 picture.save(self.picture.path)
-
 
 class Ingredient(models.Model):
     ingredient = models.CharField(_('ingredient'), max_length=1000, null=True, blank=True)
